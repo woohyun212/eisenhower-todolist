@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tick } from 'svelte';
   import type { Task } from '$lib/types';
   import AnalyzingBadge from './AnalyzingBadge.svelte';
 
@@ -12,9 +13,10 @@
 
   let isUncertain = $derived((task.confidence ?? 1) < 0.6);
   let isAnalyzing = $derived(task.quadrant === null);
-  
+
   let editing = $state(false);
-  let editValue = $state(task.title);
+  let editValue = $state('');
+  let editInput = $state<HTMLInputElement | null>(null);
 
   function formatDate(dt: string | null): string {
     if (!dt) return '';
@@ -26,9 +28,11 @@
     return `${month}/${day} ${hours}:${minutes}`;
   }
 
-  function startEdit() {
+  async function startEdit() {
     editing = true;
     editValue = task.title;
+    await tick();
+    editInput?.focus();
   }
 
   function saveEdit() {
@@ -67,21 +71,22 @@
   <div class="ml-4 flex-1">
     {#if editing}
       <input
+        bind:this={editInput}
         class="w-full px-2 py-1 border border-gray-300 rounded text-gray-800 font-medium"
         type="text"
         bind:value={editValue}
         onblur={saveEdit}
         onkeydown={handleKeydown}
-        autofocus
       />
     {:else}
-      <h3
-        class="text-gray-800 font-medium cursor-pointer hover:bg-gray-100 px-2 py-1 rounded transition-colors"
+      <button
+        type="button"
+        class="w-full text-left text-gray-800 font-medium cursor-pointer hover:bg-gray-100 px-2 py-1 rounded transition-colors"
         class:line-through={task.completed}
         onclick={startEdit}
       >
         {task.title}
-      </h3>
+      </button>
     {/if}
     <div class="flex items-center gap-2 mt-1">
       {#if isAnalyzing}
