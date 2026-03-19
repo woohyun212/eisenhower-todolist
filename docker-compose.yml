@@ -1,0 +1,61 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: backend
+    expose:
+      - "8080"
+    environment:
+      DYNAMODB_ENDPOINT_URL: https://dynamodb.ap-northeast-2.amazonaws.com
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION: ap-northeast-2
+      DYNAMODB_TABLE_NAME: ${DYNAMODB_TABLE_NAME:-se_mini1_todo_list_db}
+      SECRET_KEY: ${SECRET_KEY:-dev-secret-key-change-in-production}
+      ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: 1440
+      ALLOWED_ORIGINS: '["http://localhost:9001"]'
+      AI_BASE_URL: https://air.changwon.ac.kr/simon/v1
+      AI_MODEL: Qwen/Qwen3.5-9B
+      AI_API_KEY: ${AI_API_KEY}
+      AI_TIMEOUT: 30
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: frontend
+    expose:
+      - "5173"
+    environment:
+      VITE_API_URL: /api/v1
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "9001:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_started
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

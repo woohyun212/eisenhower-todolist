@@ -1,0 +1,38 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Node.js / npm
+node_modules/
+.npm
+.npmrc
+
+# SvelteKit
+.svelte-kit/
+
+# Docker
+.docker/
+
+# Environment files
+.env
+.env.test
+.env.local
+.env.*.local
+frontend/.env
+
+# IDE
+.vscode/
+.idea/
+
+# Agent / planning artifacts
+.sisyphus/
+
+# Evidence / screenshots
+qa-screenshots/
