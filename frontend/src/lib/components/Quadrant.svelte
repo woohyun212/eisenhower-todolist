@@ -59,8 +59,8 @@
   <div
     class="space-y-3 flex-1 overflow-auto min-h-[60px]"
     use:dndzone={{ items, flipDurationMs: 200, type: 'task' }}
-    on:consider={handleConsider}
-    on:finalize={handleFinalize}
+    onconsider={handleConsider}
+    onfinalize={handleFinalize}
   >
     {#if items.length === 0}
       <EmptyQuadrant />
