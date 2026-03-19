@@ -1,4 +1,5 @@
 {
+  "extends": "./.svelte-kit/tsconfig.json",
   "compilerOptions": {
     "moduleResolution": "bundler",
     "target": "ES2020",
@@ -15,14 +16,12 @@
     "declarationMap": true,
     "sourceMap": true,
     "baseUrl": ".",
+    "types": ["svelte", "vite/client"],
     "paths": {
       "$lib": ["src/lib"],
-      "$lib/*": ["src/lib/*"],
-      "$app": [".svelte-kit/runtime/app"],
-      "$app/*": [".svelte-kit/runtime/app/*"]
-    },
-    "types": ["svelte", "vite/client"]
+      "$lib/*": ["src/lib/*"]
+    }
   },
-  "include": ["src/**/*.ts", "src/**/*.svelte"],
+  "include": ["src/**/*.ts", "src/**/*.svelte", "src/**/*.d.ts"],
   "exclude": ["node_modules", "dist"]
 }
