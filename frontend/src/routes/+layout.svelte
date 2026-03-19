@@ -1,27 +1,30 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
-  import { page } from '$app/stores';
+  import type { Snippet } from 'svelte';
   import { isAuth, logout, getUser } from '$lib/stores/auth.svelte';
   import '../app.css';
 
+  let { children }: { children: Snippet } = $props();
+
   $effect(() => {
+    if (typeof window === 'undefined') return;
+
     const isAuthenticated = isAuth();
-    const currentPath = $page.url.pathname;
+    const currentPath = window.location.pathname;
     const isPublicRoute = currentPath === '/login' || currentPath === '/register';
 
     if (!isAuthenticated && !isPublicRoute) {
-      goto('/login');
+      window.location.href = '/login';
       return;
     }
 
     if (isAuthenticated && isPublicRoute) {
-      goto('/');
+      window.location.href = '/';
     }
   });
 
   async function handleLogout() {
     await logout();
-    goto('/login');
+    window.location.href = '/login';
   }
 </script>
 
@@ -36,7 +39,7 @@
       <div class="flex items-center gap-4">
         <span class="text-sm text-gray-600">{getUser()?.email}</span>
         <button
-          on:click={handleLogout}
+          onclick={handleLogout}
           class="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
         >
           로그아웃
@@ -45,4 +48,4 @@
     </div>
   </header>
 {/if}
-<slot />
+{@render children()}

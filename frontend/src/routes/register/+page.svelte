@@ -7,7 +7,8 @@
   let isLoading = $state(false);
   let error = $state<string | null>(null);
 
-  async function handleRegister() {
+  async function handleRegister(event: SubmitEvent) {
+    event.preventDefault();
     if (password !== confirmPassword) {
       error = '비밀번호가 일치하지 않습니다';
       return;
@@ -39,7 +40,7 @@
     <p class="text-sm text-gray-500 text-center mb-8">생산성을 높이는 가장 스마트한 방법</p>
 
     <!-- Form -->
-    <form on:submit|preventDefault={handleRegister} class="space-y-4">
+    <form onsubmit={handleRegister} class="space-y-4">
       <!-- Email Input -->
       <div>
         <label for="email" class="block text-sm font-medium text-gray-700 mb-2">이메일</label>

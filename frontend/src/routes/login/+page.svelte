@@ -6,7 +6,8 @@
   let isLoading = $state(false);
   let error = $state<string | null>(null);
 
-  async function handleLogin() {
+  async function handleLogin(event: SubmitEvent) {
+    event.preventDefault();
     isLoading = true;
     error = null;
     const success = await login(email, password);
@@ -38,7 +39,7 @@
       <h2 class="text-2xl font-semibold text-gray-900 mb-2">로그인</h2>
       <p class="text-sm text-gray-500 mb-6">오늘의 우선순위를 관리하세요</p>
 
-      <form on:submit|preventDefault={handleLogin} class="space-y-6">
+      <form onsubmit={handleLogin} class="space-y-6">
         <!-- Email Input -->
         <div>
           <label for="email" class="block text-sm font-medium text-gray-700 mb-2">이메일</label>
