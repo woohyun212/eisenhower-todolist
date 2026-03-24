@@ -725,7 +725,7 @@ MIT License - 자유롭게 사용, 수정, 배포 가능
 
 ## 문의
 
-- **이메일**: support@example.com
+- **이메일**: woohyun212@gs.cwnu.ac.kr
 - **이슈 트래킹**: GitHub Issues
 - **토론**: GitHub Discussions
 
